@@ -86,7 +86,7 @@ else:
             with st.spinner("Querying Groq AI..."):
                 try:
                     completion = client.chat.completions.create(
-                        model="llama-3.3-70b-versatile",
+                        model="mixtral-8x7b-32768",
                         messages=[{"role": "user", "content": user_prompt.strip()}]
                     )
                     st.write(completion.choices[0].message.content)
