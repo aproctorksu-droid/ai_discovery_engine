@@ -81,15 +81,16 @@ else:
     # User Input UI Widget
     user_prompt = st.text_input("Enter your prompt for the AI:")
 
-    if st.button("Generate Response"):
-        if user_prompt and user_prompt.strip():
-            with st.spinner("Querying Groq AI..."):
-                # Call Groq API model
+   if st.button("Generate Response"):
+    if user_prompt and user_prompt.strip():
+        with st.spinner("Querying Groq AI..."):
+            try:
                 completion = client.chat.completions.create(
                     model="llama3-8b-8192",
                     messages=[{"role": "user", "content": user_prompt.strip()}]
                 )
-                # Display output on screen
                 st.write(completion.choices[0].message.content)
-        else:
-            st.warning("Please enter a prompt first.")
+            except Exception as e:
+                st.error(f"Groq API Error: {str(e)}")
+    else:
+        st.warning("Please enter a prompt first.")
