@@ -63,3 +63,33 @@ with tab2:
 with tab3:
     st.subheader("Autonomous Model Calibration Log")
     st.info("🤖 **System Update:** Ingested 1 year of daily returns across multi-asset proxies. Block-bootstrapping neutralizes spurious noise before rebalancing signals are generated.")
+import os
+import streamlit as st
+from groq import Groq
+
+st.title("AI Discovery Engine")
+
+# Fetch API key from Streamlit Secrets
+groq_api_key = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
+
+if not groq_api_key:
+    st.error("GROQ_API_KEY is missing from Secrets.")
+else:
+    # Initialize Groq client
+    client = Groq(api_key=groq_api_key)
+
+    # User Input UI Widget
+    user_prompt = st.text_input("Enter your prompt for the AI:")
+
+    if st.button("Generate Response"):
+        if user_prompt:
+            with st.spinner("Querying Groq AI..."):
+                # Call Groq API model
+                completion = client.chat.completions.create(
+                    model="llama-3.3-70b-versatile",
+                    messages=[{"role": "user", "content": user_prompt}]
+                )
+                # Display output on screen
+                st.write(completion.choices[0].message.content)
+        else:
+            st.warning("Please enter a prompt first.")
