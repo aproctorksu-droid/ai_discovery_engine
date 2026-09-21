@@ -75,10 +75,8 @@ groq_api_key = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
 if not groq_api_key:
     st.error("GROQ_API_KEY is missing from Secrets.")
 else:
-    # Initialize Groq client
     client = Groq(api_key=groq_api_key)
 
-    # User Input UI Widget
     user_prompt = st.text_input("Enter your prompt for the AI:")
 
     if st.button("Generate Response"):
@@ -86,7 +84,7 @@ else:
             with st.spinner("Querying Groq AI..."):
                 try:
                     completion = client.chat.completions.create(
-                        model="mixtral-8x7b-32768",
+                        model="openai/gpt-oss-20b",
                         messages=[{"role": "user", "content": user_prompt.strip()}]
                     )
                     st.write(completion.choices[0].message.content)
