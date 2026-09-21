@@ -86,7 +86,7 @@ else:
             with st.spinner("Querying Groq AI..."):
                 # Call Groq API model
                 completion = client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model="llama3-70b-8192",
                     messages=[{"role": "user", "content": user_prompt}]
                 )
                 # Display output on screen
