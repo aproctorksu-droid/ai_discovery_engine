@@ -4,7 +4,45 @@ import numpy as np
 import plotly.express as px
 import yfinance as yf
 from statsmodels.tsa.stattools import grangercausalitytests, adfuller
+import os
+from groq import Groq
 
+# -----------------------------------------------------------------------------
+# PASSWORD AUTHENTICATION GATEWAY
+# -----------------------------------------------------------------------------
+def check_password():
+    """Returns True if the user enters the correct password."""
+    # Retrieve password from Secrets or environment variables
+    target_password = st.secrets.get("APP_PASSWORD") or os.getenv("APP_PASSWORD", "admin123")
+
+    if "password_correct" not in st.session_state:
+        st.session_state["password_correct"] = False
+
+    if st.session_state["password_correct"]:
+        return True
+
+    # Render login interface
+    st.title("🔒 Autonomous Discovery Engine - Protected")
+    user_input = st.text_input("Enter Access Password:", type="password")
+
+    if st.button("Log In"):
+        if user_input == target_password:
+            st.session_state["password_correct"] = True
+            st.rerun()
+        else:
+            st.error("❌ Incorrect password. Access denied.")
+
+    return False
+
+# Stop execution if authentication fails
+if not check_password():
+    st.stop()
+
+# -----------------------------------------------------------------------------
+# MAIN APPLICATION CODE BELOW
+# -----------------------------------------------------------------------------
+# (Your existing app layout, charts, and Groq query section continue here)
+# -----------------------------------------------------------------------------
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="AI Autonomous Discovery Dashboard", layout="wide")
 
